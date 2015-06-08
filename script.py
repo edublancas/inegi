@@ -8,52 +8,57 @@ from bs4 import BeautifulSoup
 from ghost import Ghost
 import re, urllib
 
-#Secciones
+def printOptions(ops):
+	rows = [str(idx)+'\t'+s for idx,s in enumerate(ops)]
+	for row in rows:
+		print row
 
+def printFilenames(filenames):
+	for name in filenames:
+		print name
+
+def getNamesAndUrlsFromSoup(soup):
+	links = soup.find_all("a", { "id" : re.compile("GV_Datos_ctl.._lnkArchivo") })
+	names = [link.getText() for link in links]
+	urls = [link['href'] for link in links]
+	return {'names':names, 'urls':urls}
+
+
+#Secciones
 ghost = Ghost(wait_timeout=20)
 url = 'http://www3.inegi.org.mx/sistemas/descarga/?c=200'
 ghost.open(url)
 soup = BeautifulSoup(ghost.content)
+res_sections = getNamesAndUrlsFromSoup(soup)
 
-links = soup.find_all("a", { "id" : re.compile("GV_Datos_ctl.._lnkArchivo") })
-names = [link.getText() for link in links]
-hrefs = [link['href'] for link in links]
-
-print names
-
+printOptions(res_sections['names'])
 section = input('Selecciona una sección: ')
 
 #Subsecciones
-ghost.evaluate(hrefs[section], expect_loading=True) #Cargar alguna de las opciones
+ghost.evaluate(res_sections['urls'][section], expect_loading=True) #Cargar alguna de las opciones
 soup = BeautifulSoup(ghost.content)
-links = soup.find_all("a", { "id" : re.compile("GV_Datos_ctl.._lnkArchivo") })
-names = [link.getText() for link in links]
-hrefs = [link['href'] for link in links]
+res_subsections = getNamesAndUrlsFromSoup(soup)
 
-print names
-
+printOptions(res_subsections['names'])
 subsection = input('Selecciona una subsección: ')
 
 
 #Carga listado de archivos
-ghost.evaluate(hrefs[subsection], expect_loading=True) #Cargar alguna de las opciones
+ghost.evaluate(res_subsections['urls'][subsection], expect_loading=True) #Cargar alguna de las opciones
 soup = BeautifulSoup(ghost.content)
-links = soup.find_all("a", { "id" : re.compile("GV_Datos_ctl.._lnkArchivo") })
-names = [link.getText() for link in links]
-hrefs = [link['href'] for link in links]
+res_files = getNamesAndUrlsFromSoup(soup)
 
 #Imprime listado de archivos
-print names
+print 'Descargando...'
+printFilenames(res_files['names'][1:])
 
 urls = []
 #Descarga del archivo
-for href in hrefs[1:]:
+for href in res_files['urls'][1:]:
 	ghost.evaluate(href, expect_loading=True) #Cargar alguna de las opciones
 	soup = BeautifulSoup(ghost.content)
 	url = soup.find_all("iframe", { "id" : "iFrameDescarga"})[0]['src']
 	urls.append(url)
 
-urls
-
 for i,url in enumerate(urls):
-	urllib.urlretrieve(url, names[i+1])
+	urllib.urlretrieve(url, res_files['names'][i+1])
