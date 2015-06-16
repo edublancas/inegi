@@ -15,11 +15,12 @@ def printOptions(ops):
 		print row
 
 #Print file names
-def printFilenames(filenames):
+def printFilenames(ops):
+	filenames = [dic["name"] for dic in ops]
 	for name in filenames:
 		print name
 
-#Get names and URLs from file listing
+#Get names, URLs and types from list
 def getNamesAndUrlsFromSoup(soup):
 	links = soup.find_all("a", { "id" : re.compile("GV_Datos_ctl.._lnkArchivo") })
 	names = [link.getText() for link in links]
@@ -47,12 +48,12 @@ while not section in range(len(res_sections)):
 	section = input('Opción incorrecta. Selecciona una sección: ')
 
 #Scrape subsections
-ghost.evaluate(res_sections['urls'][section], expect_loading=True) #Cargar alguna de las opciones
+ghost.evaluate(res_sections[int(section)]['url'], expect_loading=True) #Cargar alguna de las opciones
 soup = BeautifulSoup(ghost.content)
 res_subsections = getNamesAndUrlsFromSoup(soup)
 
 #Print subsections
-printOptions(res_subsections['names'])
+printOptions(res_subsections)
 
 subsection = input('Selecciona una subsección: ')
 #Check if value is valid
@@ -61,17 +62,17 @@ while not subsection in range(len(res_subsections)):
 
 
 #Carga listado de archivos
-ghost.evaluate(res_subsections['urls'][subsection], expect_loading=True) #Cargar alguna de las opciones
+ghost.evaluate(res_subsections[int(subsection)]['url'], expect_loading=True) #Cargar alguna de las opciones
 soup = BeautifulSoup(ghost.content)
 res_files = getNamesAndUrlsFromSoup(soup)
 
 #Imprime listado de archivos
 print 'Descargando...'
-printFilenames(res_files['names'][1:])
+printFilenames(res_files)
 
 urls = []
 #Descarga del archivo
-for href in res_files['urls'][1:]:
+for href in [dic["url"] for dic in res_files]:
 	ghost.evaluate(href, expect_loading=True) #Cargar alguna de las opciones
 	soup = BeautifulSoup(ghost.content)
 	url = soup.find_all("iframe", { "id" : "iFrameDescarga"})[0]['src']
