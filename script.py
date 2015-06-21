@@ -51,7 +51,7 @@ def getFiles(res_files):
     urls = scrapeFileDirectLinks(res_files)
     names = [dic["name"] for dic in res_files]
     if (sys.argv[1]):
-        text_file = open(sys.argv[1], "w+")
+        text_file = open(sys.argv[1], "aw+")
         for url in urls:
             text_file.write(url+"\n")
         text_file.close()
@@ -153,6 +153,39 @@ while continue_:
         print 'Descargando...'
         printFilenames([selected_file])
         getFiles([selected_file])
+        answer = raw_input('¿Continuar ejecución? (y/n): ').lower()
+        while not (answer=="y" or answer=="n"):
+            answer = raw_input('¿Continuar ejecución? (y/n): ')
+        if answer=="y":
+            continue_ = True
+            #Simulate click on back button
+            selection = "back"
+            section = 0
+        else:
+            continue_ = False
+    elif selection=="bulk":
+        print "Iniciando descarga masiva..."
+        res_resources = getNamesAndUrlsFromSoup(soup)
+        for resource in res_resources:
+            if resource["type"] == "folder":
+                ghost.evaluate(resource['url'], expect_loading=True)
+                soup = BeautifulSoup(ghost.content)
+                res_files = getNamesAndUrlsFromSoup(soup)
+                #Imprime listado de archivos
+                print 'Descargando...'
+                printFilenames(res_files)
+                getFiles(res_files)
+                #Simulate back button
+                ghost.evaluate(res_resources[0]['url'], expect_loading=True)
+            elif resource["type"] == "file":
+                #res_files = getNamesAndUrlsFromSoup(soup)
+                #selected_file =  res_files[int(section)]
+                print 'Descargando...'
+                #printFilenames([selected_file])
+                #getFiles([selected_file])
+            else:
+                print "Unknown resources. Skipping."
+
         answer = raw_input('¿Continuar ejecución? (y/n): ').lower()
         while not (answer=="y" or answer=="n"):
             answer = raw_input('¿Continuar ejecución? (y/n): ')

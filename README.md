@@ -21,7 +21,6 @@ Archivos disponibles para descarga:
     * Natalidad, mortalidad y nupcialidad
     * Relaciones laborales de jurisdicción laboral
 
-
 ##Dependencias
 
 Para poder correr el script es necesario tener instalado lo siguiente:
@@ -30,6 +29,28 @@ Para poder correr el script es necesario tener instalado lo siguiente:
 * Beautiful Soup
 * Ghost
 
+##Ejemplo de uso
+
+Para correr el script:
+
+`python script.py`
+
+El programa permite moverse a través de los menús que tiene la página del INEGI. Después de listar los recursos disponibles, el programa pedirá al usuario seleccionar alguno, dependiendo del tipo de recursos seleccionado el programa tomará acciones diferentes:
+
+* Menú: el programa desplegará las nuevas opciones
+* Regresar: el programa regresará al folder anterior
+* Archivo: la descarga comenzará automáticamente (el programa también puede obtener el link directo y enviarlo a un archivo de texto, ver la siguiente sección)
+* Folder: descargará todos los archivos dentro del mismo
+* Descargar todo: descargará todos los recursos disponibles en el listado actual
+
+###Enviando links a un archivo de texto
+
+Aunque es posible descargar archivos usando el programa directamente, no es recomendable hacerlo cuando se quieren descargar muchos archivos (ej. todos los archivos estatales del DENUE), para ello, es posible enviar a un archivo de texto las ligas directas a los archivos, para que puedan ser descargados con un programa especializado (ej. [jDownloader](http://jdownloader.org/))
+
+Para indicar al programa que envíe los links a un archivo de texto:
+
+`python script.py /path/al/archivo/urls.txt`
+
 ##Trabajo hecho
 
 * Listar todos los documentos de la página de descarga masiva
@@ -37,10 +58,14 @@ Para poder correr el script es necesario tener instalado lo siguiente:
 * Descargar folders con archivos para un estado completo
 * Descargar archivos de manera individual
 * Opción para enviar links a un archivo de texto en vez de descargarlos (en caso de querer usar algún gestor de descargas)
+* Poder descargar estudios completos (ej. las 33 carpetas del DENUE)
 
 ##Trabajo pendiente
 
-* Poder descargar estudios completos (ej. las 33 carpetas del DENUE)
 * Crear un binario para poder correr el script sin dependencias
 * Mejorar la impresión del menú
 * Imprimir el path en el que está el usuario
+
+##Bugs
+
+* Cuando se hace una descarga masiva, en algunas ocasiones el programa lanza un error de timeout
