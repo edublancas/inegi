@@ -10,15 +10,48 @@ import re, urllib
 
 #Generate table for options
 def printOptions(ops):
-	rows = [str(idx)+'\t'+dic["name"]+'\t'+dic["type"] for idx,dic in enumerate(ops)]
+	rows = [str(idx)+'\t'+dic["name"]+('/' if dic["type"]=='menu' else 
+		 " "+dic["type"]) for idx,dic in enumerate(ops)]
 	for row in rows:
 		print row
 
 #Print file names
 def printFilenames(ops):
+	ops.pop(0)
 	filenames = [dic["name"] for dic in ops]
 	for name in filenames:
 		print name
+
+def findOptionType(op):
+	p = re.compile('\[[0-9]{2}')
+	type = None
+	if op["type"]=="Dir" and p.match(op["name"]):
+		type = "folder"
+	elif op["type"]=="Dir":
+		type = "menu"
+	elif op["type"]==u'\xa0':
+		type = "back"
+	else:
+		type = "file"
+	return {"name":op["name"], "url":op["url"], "type":type}
+
+def scrapeFileDirectLinks(files):
+	urls = []
+	#Descarga del archivo
+	for href in [dic["url"] for dic in files]:
+		ghost.evaluate(href, expect_loading=True) #Cargar alguna de las opciones
+		soup = BeautifulSoup(ghost.content)
+		url = soup.find_all("iframe", { "id" : "iFrameDescarga"})[0]['src']
+		urls.append(url)
+	return urls
+
+def downloadFiles(res_files):
+	#Skip back button
+	res_files.pop(0)
+	urls = scrapeFileDirectLinks(res_files)
+	names = [dic["name"] for dic in res_files]
+	for i,url in enumerate(urls):
+		urllib.urlretrieve(url, names[i])
 
 #Get names, URLs and types from list
 def getNamesAndUrlsFromSoup(soup):
@@ -27,8 +60,15 @@ def getNamesAndUrlsFromSoup(soup):
 	urls = [link['href'] for link in links]
 	rows = soup.find_all("tr", { "class" : "TdCenso"})
 	types = [list(row.children)[3].string for row in rows]
-	#return {'names':names, 'urls':urls, 'types':types}
-	return [{"name":a[0], "url":a[1], "type":a[2]} for a in zip(names,urls,types)]
+	#There are four types of options:
+	#1 - Menu (more options)
+	#2 - Directory (Folder full of files)
+	#3 - File Single file
+	#4 - Link back
+	#Based on the name and the type, classify options
+	dic = [{"name":a[0], "url":a[1], "type":a[2]} for a in zip(names,urls,types)]
+	dic = [findOptionType(op) for op in dic]
+	return dic
 
 #Open INEGI massive download website
 ghost = Ghost(wait_timeout=20)
@@ -42,41 +82,51 @@ res_sections = getNamesAndUrlsFromSoup(soup)
 printOptions(res_sections)
 
 #Ask for a section number
-section = input('Selecciona una sección: ')
+section = int(raw_input('Selecciona una opción: '))
 #Check if value is valid
 while not section in range(len(res_sections)):
-	section = input('Opción incorrecta. Selecciona una sección: ')
+	section = int(raw_input('Opción incorrecta. Selecciona una sección: '))
 
-#Scrape subsections
-ghost.evaluate(res_sections[int(section)]['url'], expect_loading=True) #Cargar alguna de las opciones
-soup = BeautifulSoup(ghost.content)
-res_subsections = getNamesAndUrlsFromSoup(soup)
+selection = res_sections[int(section)]["type"]
 
-#Print subsections
-printOptions(res_subsections)
+continue_ = True
 
-subsection = input('Selecciona una subsección: ')
-#Check if value is valid
-while not subsection in range(len(res_subsections)):
-	subsection = input('Opción incorrecta. Selecciona una subsección: ')
-
-
-#Carga listado de archivos
-ghost.evaluate(res_subsections[int(subsection)]['url'], expect_loading=True) #Cargar alguna de las opciones
-soup = BeautifulSoup(ghost.content)
-res_files = getNamesAndUrlsFromSoup(soup)
-
-#Imprime listado de archivos
-print 'Descargando...'
-printFilenames(res_files)
-
-urls = []
-#Descarga del archivo
-for href in [dic["url"] for dic in res_files]:
-	ghost.evaluate(href, expect_loading=True) #Cargar alguna de las opciones
-	soup = BeautifulSoup(ghost.content)
-	url = soup.find_all("iframe", { "id" : "iFrameDescarga"})[0]['src']
-	urls.append(url)
-
-for i,url in enumerate(urls):
-	urllib.urlretrieve(url, res_files['names'][i+1])
+while continue_:
+	#Check type of selection menu/folder with files
+	#If menu, load new page and print listings
+	if selection == "menu" or selection == "back":
+		#Scrape sections
+		ghost.evaluate(res_sections[int(section)]['url'], expect_loading=True) #Cargar alguna de las opciones
+		soup = BeautifulSoup(ghost.content)
+		res_sections = getNamesAndUrlsFromSoup(soup)
+		#Print sections
+		printOptions(res_sections)
+		section = int(raw_input('Selecciona una subsección: '))
+		#Check if value is valid
+		while not section in range(len(res_sections)):
+			section = int(raw_input('Opción incorrecta. Selecciona una subsección: '))
+		selection = res_sections[int(section)]["type"]
+	#If folder, download all the files
+	elif selection=="folder":
+		#Load file listing
+		ghost.evaluate(res_sections[int(section)]['url'], expect_loading=True) #Cargar alguna de las opciones
+		soup = BeautifulSoup(ghost.content)
+		res_files = getNamesAndUrlsFromSoup(soup)
+		#Imprime listado de archivos
+		print 'Descargando...'
+		printFilenames(res_files)
+		downloadFiles(res_files)
+		answer = raw_input('¿Continuar ejecución? ').lower()
+		while not answer=="y" or answer=="n":
+			answer = raw_input('¿Continuar ejecución? (y/n): ')
+		if answer=="y":
+			continue_ = True
+		else:
+			continue_ = False
+	#If file, download single file
+	elif selection=="file":
+		print "downloading file"
+		continue_ = False
+	else:
+		print "unkwown option"
+		continue_ = False
