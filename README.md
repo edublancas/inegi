@@ -20,6 +20,10 @@ Archivos disponibles para descarga:
     * Judiciales en materia penal
     * Natalidad, mortalidad y nupcialidad
     * Relaciones laborales de jurisdicción laboral
+    
+##Descargando archivos sin correr el script
+
+En el repositorio se encuentran disponibles archivos de texto con links directos para obtener estudios completos del INEGI. Cada estudio se actualiza en periodos diferentes, para asegurar que cuenta con la última versión use el script.
 
 ##Dependencias
 
@@ -35,7 +39,7 @@ Para correr el script:
 
 `python script.py`
 
-El programa permite moverse a través de los menús que tiene la página del INEGI. Después de listar los recursos disponibles, el programa pedirá al usuario seleccionar alguno, dependiendo del tipo de recursos seleccionado el programa tomará acciones diferentes:
+El programa permite moverse a través de los menús que tiene la página del INEGI. Después de listar los recursos disponibles, el programa pedirá al usuario seleccionar alguno, dependiendo del tipo de recurso seleccionado el programa tomará acciones diferentes:
 
 * Menú: el programa desplegará las nuevas opciones
 * Regresar: el programa regresará al folder anterior
@@ -45,7 +49,7 @@ El programa permite moverse a través de los menús que tiene la página del INE
 
 ###Enviando links a un archivo de texto
 
-Aunque es posible descargar archivos usando el programa directamente, no es recomendable hacerlo cuando se quieren descargar muchos archivos (ej. todos los archivos estatales del DENUE), para ello, es posible enviar a un archivo de texto las ligas directas a los archivos, para que puedan ser descargados con un programa especializado (ej. [jDownloader](http://jdownloader.org/))
+Aunque es posible descargar archivos usando el programa directamente, no es recomendable hacerlo cuando se quieren descargar muchos archivos (ej. todos los archivos estatales del DENUE), para ello, es posible enviar a un archivo de texto las ligas directas a los recursos, para que puedan ser descargados con un programa especializado (ej. [jDownloader](http://jdownloader.org/))
 
 Para indicar al programa que envíe los links a un archivo de texto:
 
