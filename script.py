@@ -12,7 +12,10 @@ def printOptions(ops):
 
 #Print file names
 def printFilenames(ops):
-    ops.pop(0)
+    #Skip back button if exists
+    if res_files[0]["type"]=="back":
+        res_files.pop(0)
+
     filenames = [dic["name"] for dic in ops]
     for name in filenames:
         print name
@@ -41,8 +44,9 @@ def scrapeFileDirectLinks(files):
     return urls
 
 def getFiles(res_files):
-    #Skip back button
-    res_files.pop(0)
+    #Skip back button if exists
+    if res_files[0]["type"]=="back":
+        res_files.pop(0)
 
     urls = scrapeFileDirectLinks(res_files)
     names = [dic["name"] for dic in res_files]
@@ -64,14 +68,21 @@ def getNamesAndUrlsFromSoup(soup):
     rows = soup.find_all("tr", { "class" : "TdCenso"})
     types = [list(row.children)[3].string for row in rows]
     #There are four types of options:
-    #1 - Menu (more options)
-    #2 - Directory (Folder full of files)
-    #3 - File Single file
-    #4 - Link back
+    #1 - Menu (more options) - menu
+    #2 - Directory (Folder full of files) - dir
+    #3 - File Single file - file
+    #4 - Link back - back
     #Based on the name and the type, classify options
     dic = [{"name":a[0], "url":a[1], "type":a[2]} for a in zip(names,urls,types)]
     dic = [findOptionType(op) for op in dic]
     return dic
+
+def bulkDownloadAvailable(res_sections):
+    types = [dic["type"] for dic in res_sections]
+    if "menu" in types:
+        return False
+    else:
+        return True
 
 #Open INEGI massive download website
 ghost = Ghost(wait_timeout=20)
@@ -102,6 +113,12 @@ while continue_:
         ghost.evaluate(res_sections[int(section)]['url'], expect_loading=True) #Cargar alguna de las opciones
         soup = BeautifulSoup(ghost.content)
         res_sections = getNamesAndUrlsFromSoup(soup)
+
+        #Check if bulk download is available
+        canBulkDownload = bulkDownloadAvailable(res_sections)
+        if canBulkDownload:
+            res_sections.append({"name":"Descargar todo", "url":"", "type":"bulk"})
+
         #Print sections
         printOptions(res_sections)
         section = int(raw_input('Selecciona una subsección: '))
@@ -120,7 +137,7 @@ while continue_:
         printFilenames(res_files)
         getFiles(res_files)
         answer = raw_input('¿Continuar ejecución? (y/n): ').lower()
-        while not answer=="y" or answer=="n":
+        while not (answer=="y" or answer=="n"):
             answer = raw_input('¿Continuar ejecución? (y/n): ')
         if answer=="y":
             continue_ = True
@@ -131,8 +148,21 @@ while continue_:
             continue_ = False
     #If file, download single file
     elif selection=="file":
-        print "downloading file"
-        continue_ = False
+        res_files = getNamesAndUrlsFromSoup(soup)
+        selected_file =  res_files[int(section)]
+        print 'Descargando...'
+        printFilenames([selected_file])
+        getFiles([selected_file])
+        answer = raw_input('¿Continuar ejecución? (y/n): ').lower()
+        while not (answer=="y" or answer=="n"):
+            answer = raw_input('¿Continuar ejecución? (y/n): ')
+        if answer=="y":
+            continue_ = True
+            #Simulate click on back button
+            selection = "back"
+            section = 0
+        else:
+            continue_ = False
     else:
-        print "unkwown option"
+        print "Unkwown option"
         continue_ = False

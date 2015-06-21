@@ -34,11 +34,13 @@ Para poder correr el script es necesario tener instalado lo siguiente:
 
 * Listar todos los documentos de la página de descarga masiva
 * Poder desplazarse por los menús de la página
-* Descargar folder con archivos completos
+* Descargar folders con archivos para un estado completo
+* Descargar archivos de manera individual
 * Opción para enviar links a un archivo de texto en vez de descargarlos (en caso de querer usar algún gestor de descargas)
 
 ##Trabajo pendiente
 
-* Descargar archivos de manera individual
 * Poder descargar estudios completos (ej. las 33 carpetas del DENUE)
 * Crear un binario para poder correr el script sin dependencias
+* Mejorar la impresión del menú
+* Imprimir el path en el que está el usuario
