@@ -1,9 +1,4 @@
  # -*- coding: utf-8 -*-
-
-#Ghost docs http://ghost-py.readthedocs.org/en/latest/
-#Ghost webpage http://jeanphix.me/Ghost.py/
-#BS docs http://www.crummy.com/software/BeautifulSoup/bs4/doc/#
-
 from bs4 import BeautifulSoup
 from ghost import Ghost
 import re, urllib, sys
