@@ -1,0 +1,6 @@
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fCensos+econ%f3micos%2f1999%2fCE1999_00_Nacional_tsv.zip
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fCensos+econ%f3micos%2f1999%2fCE1999_00_Nacional_xls.zip
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fCensos+econ%f3micos%2f2004%2fCE2004_00_Nacional_xls.zip
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fCensos+econ%f3micos%2f2004%2fCE2004_00_Nacional_tsv.zip
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fCensos+econ%f3micos%2f2009%2fCE2009_00_Nacional_xls.zip
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fCensos+econ%f3micos%2f2009%2fCE2009_00_Nacional_tsv.zip

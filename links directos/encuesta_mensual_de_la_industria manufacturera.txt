@@ -1,0 +1,4 @@
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fEncuestas+en+establecimientos%2fEncuesta+mensual+de+la+industria+manufacturera%2f00+Nacional%2femim_00_nacional_english_tsv.zip
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fEncuestas+en+establecimientos%2fEncuesta+mensual+de+la+industria+manufacturera%2f00+Nacional%2femim_00_nacional_tsv.zip
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fEncuestas+en+establecimientos%2fEncuesta+mensual+de+la+industria+manufacturera%2f00+Nacional%2femim_00_nacional_english_xlsx.zip
+http://www3.inegi.org.mx/sistemas/descarga/descargaarchivo.aspx?file=Indicadores%2fPor+fuente-proyecto%2fEncuestas+en+establecimientos%2fEncuesta+mensual+de+la+industria+manufacturera%2f00+Nacional%2femim_00_nacional_xlsx.zip
