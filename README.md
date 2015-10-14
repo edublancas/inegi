@@ -31,7 +31,7 @@ Para poder correr el script es necesario tener instalado lo siguiente:
 
 * Python 2.7
 * Beautiful Soup
-* Ghost
+* [Ghost](https://github.com/jeanphix/Ghost.py)
 
 ##Ejemplo de uso
 

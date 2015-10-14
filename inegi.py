@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
 from ghost import Ghost
 import re, urllib, sys
@@ -85,7 +85,7 @@ def bulkDownloadAvailable(res_sections):
         return True
 
 #Open INEGI massive download website
-ghost = Ghost(wait_timeout=20)
+ghost = Ghost().start()
 url = 'http://www3.inegi.org.mx/sistemas/descarga/'
 ghost.open(url)
 soup = BeautifulSoup(ghost.content)
