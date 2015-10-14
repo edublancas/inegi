@@ -37,7 +37,7 @@ Para poder correr el script es necesario tener instalado lo siguiente:
 
 Para correr el script:
 
-`python script.py`
+`python inegi.py`
 
 El programa permite moverse a través de los menús que tiene la página del INEGI. Después de listar los recursos disponibles, el programa pedirá al usuario seleccionar alguno, dependiendo del tipo de recurso seleccionado el programa tomará acciones diferentes:
 
@@ -53,7 +53,7 @@ Aunque es posible descargar archivos usando el programa directamente, no es reco
 
 Para indicar al programa que envíe los links a un archivo de texto:
 
-`python script.py /path/al/archivo/urls.txt`
+`python inegi.py /path/al/archivo/urls.txt`
 
 ##Trabajo hecho
 
